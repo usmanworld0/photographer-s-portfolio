@@ -4,7 +4,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { projectsData } from "@/data/projects";
 
 export const metadata: Metadata = {
-  title: "Work — Farline",
+  title: "Work — Qalakari",
   description: "Eleven prints from 2022 — 2025, in five series. Hover a line to lift the print; click it to see the plate.",
 };
 

@@ -65,8 +65,6 @@ export function FarlineHang({ projects }: FarlineHangProps) {
 
   const [activeHoverIdx, setActiveHoverIdx] = useState<number>(-1);
   const [counterText, setCounterText] = useState<string>("01 — 11");
-  const [settingsOpen, setSettingsOpen] = useState(false);
-  const [motionEnabled, setMotionEnabled] = useState(true);
   const [selectedProjectIdx, setSelectedProjectIdx] = useState<number | null>(null);
 
   const stateRef = useRef({
@@ -100,11 +98,11 @@ export function FarlineHang({ projects }: FarlineHangProps) {
     lastPos: 0,
     rest: Array.from({ length: L }, () => [0, 0, 0, 0, 0, 0, 0]),
     boxW: 0,
+    boxH: 0,
     px: 0,
     py: 0,
     inside: false,
     dragging: false,
-    motionEnabled: true,
     dragStartX: 0,
     dragStartY: 0,
     dragMoved: 0,
@@ -222,7 +220,7 @@ export function FarlineHang({ projects }: FarlineHangProps) {
       const dt = s.last ? Math.min(0.05, (timestamp - s.last) / 1000) : 0;
       s.last = timestamp;
 
-      if (!isReducedMotion && s.motionEnabled) {
+      if (!isReducedMotion) {
         s.clock += 0.006;
       }
       s.introT += dt;
@@ -240,7 +238,8 @@ export function FarlineHang({ projects }: FarlineHangProps) {
       const aspectDiff = Y(1.5 - width / height);
       const scaleW = 1 + 1.3 * aspectDiff;
       const isMobile = aspectDiff > 0.5;
-      const cardScale = isMobile ? He.size * 0.92 : He.size * scaleW;
+      const cardAspect = isMobile ? 1.8 : 1.3;
+      const cardScale = isMobile ? He.size * 1.9 : He.size * scaleW;
       const stepX = isMobile ? 0.17 : He.stepX * scaleW * (1 - 0.67 * aspectDiff);
       const stepY = isMobile ? -0.07 : He.stepY * (1 - 0.24 * aspectDiff);
 
@@ -260,10 +259,11 @@ export function FarlineHang({ projects }: FarlineHangProps) {
       stage.style.perspectiveOrigin = `${(100 * camOriginX).toFixed(3)}% ${(100 * camOriginY).toFixed(3)}%`;
 
       const boxWidth = width * Math.max(cardScale, 0.4) * 1.02;
-      const boxHeight = boxWidth / 1.3;
+      const boxHeight = boxWidth / cardAspect;
 
-      if (Math.abs(boxWidth - s.boxW) >= 1) {
+      if (Math.abs(boxWidth - s.boxW) >= 1 || Math.abs(boxHeight - s.boxH) >= 1) {
         s.boxW = boxWidth;
+        s.boxH = boxHeight;
         for (let t = 0; t < L; t++) {
           const card = cardRefs.current[t];
           if (card) {
@@ -305,7 +305,7 @@ export function FarlineHang({ projects }: FarlineHangProps) {
         s.rest[e][5] = cardScale;
 
         // Sway & breeze physics
-        if (!isReducedMotion && s.motionEnabled && dt > 0) {
+        if (!isReducedMotion && dt > 0) {
           const oscSpeed = s.clock * 60 / 36;
           const kStiff = 30 * (0.84 + 0.32 * ((e * 0.618) % 1));
           const kDamp = 1.9;
@@ -328,7 +328,7 @@ export function FarlineHang({ projects }: FarlineHangProps) {
         const sinY = Math.sin(radY);
 
         const cardW = width * cardScale;
-        const cardH = cardW / 1.3;
+        const cardH = cardW / cardAspect;
         const halfW = cardW / 2;
         const halfH = cardH / 2;
 
@@ -402,7 +402,7 @@ export function FarlineHang({ projects }: FarlineHangProps) {
           const rest = s.rest[curIdx];
           peg.style.visibility = "visible";
           peg.style.opacity = `${isReducedMotion ? 1 : s.introOpacity[curIdx]}`;
-          peg.style.transform = `translate3d(${(rest[0] - (0.05 * s.boxW) / 2).toFixed(2)}px, ${(rest[1] - s.boxW / 2.6 - (0.09 * s.boxW) * 0.32).toFixed(2)}px, ${(rest[2] + 1.5).toFixed(2)}px) rotateY(${rest[3].toFixed(3)}deg) rotateZ(${rest[4].toFixed(3)}deg) scale(${(width * rest[5] / s.boxW).toFixed(5)})`;
+          peg.style.transform = `translate3d(${(rest[0] - (0.05 * s.boxW) / 2).toFixed(2)}px, ${(rest[1] - s.boxW / (2 * cardAspect) - (0.09 * s.boxW) * 0.32).toFixed(2)}px, ${(rest[2] + 1.5).toFixed(2)}px) rotateY(${rest[3].toFixed(3)}deg) rotateZ(${rest[4].toFixed(3)}deg) scale(${(width * rest[5] / s.boxW).toFixed(5)})`;
         } else if (peg) {
           peg.style.visibility = "hidden";
         }
@@ -410,7 +410,7 @@ export function FarlineHang({ projects }: FarlineHangProps) {
         if (nextIdx !== undefined && Math.abs(getRel(nextIdx) - getRel(curIdx)) < 1.6) {
           const r1 = s.rest[curIdx];
           const r2 = s.rest[nextIdx];
-          const anchorY = s.boxW / 2.6;
+          const anchorY = s.boxW / (2 * cardAspect);
           const dx = r2[0] - r1[0];
           const dy = r2[1] - r1[1];
           const dz = r2[2] - r1[2];
@@ -425,7 +425,7 @@ export function FarlineHang({ projects }: FarlineHangProps) {
             const reveal = isReducedMotion ? 1 : Y((s.introT - rank * 0.095) / 0.34);
             const easedReveal = reveal * reveal * (3 - 2 * reveal);
             const sag = Math.max(8, Math.min(38, len * (0.09 + 0.055 * ((curIdx * 0.618) % 1))));
-            const breezeSag = !isReducedMotion && s.motionEnabled
+            const breezeSag = !isReducedMotion
               ? Math.sin(s.clock * 36 + curIdx * 1.73) * 3.2
               : 0;
             const curveSag = Math.max(2, sag + breezeSag);
@@ -663,7 +663,7 @@ export function FarlineHang({ projects }: FarlineHangProps) {
           ref={titleRef}
           className="pm-title font-anton text-[#14130E] leading-[0.84] tracking-[-0.005em] uppercase"
         >
-          FARLINE
+          QALAKARI
         </h1>
 
         <div className="pm-meta mt-5">
@@ -702,62 +702,6 @@ export function FarlineHang({ projects }: FarlineHangProps) {
         className="pm-counter fixed top-4 right-5 z-40 font-mono text-[12px] font-medium tracking-[0.06em] text-[#14130E] uppercase pointer-events-none"
       >
         {counterText}
-      </div>
-
-      <div className="pm-settings fixed left-5 z-50">
-        <section
-          id="farline-settings"
-          className="pm-settings-panel"
-          aria-label="Display settings"
-          hidden={!settingsOpen}
-          onPointerDown={(event) => event.stopPropagation()}
-        >
-          <div className="pm-settings-heading">
-            <span>DISPLAY</span>
-            <button
-              type="button"
-              className="pm-settings-close"
-              aria-label="Close settings"
-              onClick={() => setSettingsOpen(false)}
-            >
-              ×
-            </button>
-          </div>
-          <button
-            type="button"
-            className="pm-motion-toggle"
-            role="switch"
-            aria-checked={motionEnabled}
-            onClick={() => {
-              const enabled = !motionEnabled;
-              setMotionEnabled(enabled);
-              stateRef.current.motionEnabled = enabled;
-            }}
-          >
-            <span>Ambient movement</span>
-            <span className="pm-switch" aria-hidden="true">
-              <i />
-            </span>
-          </button>
-          <p>Drag or scroll to move along the line. Select a print to explore the series.</p>
-        </section>
-        <button
-          type="button"
-          className="pm-settings-button"
-          aria-expanded={settingsOpen}
-          aria-controls="farline-settings"
-          onPointerDown={(event) => event.stopPropagation()}
-          onClick={() => setSettingsOpen((open) => !open)}
-        >
-          <span className="pm-settings-icon" aria-hidden="true">
-            <svg viewBox="0 0 20 20" fill="none">
-              <path d="M3 6h14M3 14h14" />
-              <circle cx="7" cy="6" r="2" />
-              <circle cx="13" cy="14" r="2" />
-            </svg>
-          </span>
-          <span>Settings</span>
-        </button>
       </div>
 
       {selectedProjectIdx !== null && projects[selectedProjectIdx] && (

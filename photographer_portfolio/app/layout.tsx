@@ -19,10 +19,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Farline",
-  description: "Farline is a portfolio where the hero is the work itself. Your prints hang on one line running away from you in real 3D.",
+  title: "Qalakari",
+  description: "Qalakari is a portfolio where the hero is the work itself. Prints hang on one line running away from you in real 3D.",
   icons: {
-    icon: "https://framerusercontent.com/images/tTnbVYO1jxUM9cShEJiw2lzRp8.png",
+    icon: "/favicon.ico",
   },
 };
 

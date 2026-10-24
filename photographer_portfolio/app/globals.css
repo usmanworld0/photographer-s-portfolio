@@ -42,3 +42,14 @@ body {
   color: var(--foreground);
   overflow-x: hidden;
 }
+
+@media (max-width: 767px) {
+  .floating-nav {
+    max-width: calc(100vw - 72px);
+    min-width: 0;
+  }
+
+  .nav-contact-link {
+    display: none !important;
+  }
+}

@@ -4,7 +4,7 @@ import { ContactView } from "@/components/contact/ContactView";
 import { Navbar } from "@/components/layout/Navbar";
 
 export const metadata: Metadata = {
-  title: "Contact — Farline",
+  title: "Contact — Qalakari",
   description: "Commissions, licensing and print sales. I read everything, and reply within two days.",
 };
 

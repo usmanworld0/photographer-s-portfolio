@@ -3,8 +3,8 @@ import { AboutView } from "@/components/about/AboutView";
 import { Navbar } from "@/components/layout/Navbar";
 
 export const metadata: Metadata = {
-  title: "About — Farline",
-  description: "Landscape and aerial photographer working between Lisbon and the south coast of Iceland. Shooting medium format and aerial platforms on salt, sand and open water.",
+  title: "About — Qalakari",
+  description: "Meet Muhammad Usman, a Pakistan-based photographer working across landscape and aerial photography.",
 };
 
 export default function AboutPage() {

@@ -19,13 +19,13 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const project = projectsData.find((p) => p.slug === slug);
-  if (!project) return { title: "Farline" };
+  if (!project) return { title: "Qalakari" };
 
   return {
-    title: `${project.title} — Farline`,
+    title: `${project.title} — Qalakari`,
     description: project.description,
     openGraph: {
-      title: `${project.title} — Farline`,
+      title: `${project.title} — Qalakari`,
       description: project.description,
       images: [{ url: project.heroImage }],
     },

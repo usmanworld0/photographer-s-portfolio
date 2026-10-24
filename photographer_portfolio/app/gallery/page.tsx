@@ -4,7 +4,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { galleryData } from "@/data/gallery";
 
 export const metadata: Metadata = {
-  title: "Gallery — Farline",
+  title: "Gallery — Qalakari",
   description: "Out-takes and the frames in between, laid out on the table. Drag to move it, hover to lift a print, click to look closer.",
 };
 
