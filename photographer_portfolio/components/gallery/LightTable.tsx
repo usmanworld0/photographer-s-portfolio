@@ -94,12 +94,58 @@ export function LightTable({ items }: LightTableProps) {
     return tiles.filter((t) => t.category === activeCategory);
   }, [tiles, activeCategory]);
 
+  const centerTile = useCallback((tile: TileData) => {
+    const container = containerRef.current;
+    if (!container) return;
+    const bounds = container.getBoundingClientRect();
+    const pan = panRef.current;
+    const zoom = zoomRef.current;
+    const tileWidth = Math.min(240, Math.max(150, bounds.width * 0.5));
+    pan.targetX = bounds.width / 2 - (tile.x + tileWidth / 2) * zoom;
+    if (bounds.width < 900) {
+      const toolbarBottom = container.querySelector('[role="toolbar"]')?.getBoundingClientRect().bottom ?? 0;
+      const tileTop = Math.min(
+        bounds.height - tileWidth * 1.05 - 56,
+        Math.max(toolbarBottom + 12, bounds.height * 0.48),
+      );
+      pan.targetY = tileTop - tile.y * zoom;
+    } else {
+      pan.targetY = bounds.height / 2 - (tile.y + tileWidth * 0.48) * zoom;
+    }
+    pan.x = pan.targetX;
+    pan.y = pan.targetY;
+    pan.vx = 0;
+    pan.vy = 0;
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const firstVisible = activeCategory === "All"
+        ? tiles[0]
+        : tiles.find((tile) => tile.category === activeCategory);
+      if (firstVisible) centerTile(firstVisible);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [activeCategory, centerTile, tiles]);
+
   // Keep one animation loop alive while the table is mounted.
   useEffect(() => {
     let animId = 0;
     const pan = panRef.current;
     const canvas = canvasRef.current;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const bounds = containerRef.current?.getBoundingClientRect();
+    const toolbarBottom = containerRef.current?.querySelector('[role="toolbar"]')?.getBoundingClientRect().bottom ?? 0;
+    if (bounds && bounds.width < 900 && tiles[0]) {
+      const tileWidth = Math.min(240, Math.max(150, bounds.width * 0.5));
+      const tileTop = Math.min(
+        bounds.height - tileWidth * 1.05 - 56,
+        Math.max(toolbarBottom + 12, bounds.height * 0.48),
+      );
+      pan.x = pan.targetX = bounds.width / 2 - tiles[0].x - tileWidth / 2;
+      pan.y = pan.targetY = tileTop - tiles[0].y;
+    }
 
     const tick = (now: number) => {
       animId = requestAnimationFrame(tick);
@@ -133,7 +179,7 @@ export function LightTable({ items }: LightTableProps) {
 
     animId = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(animId);
-  }, []);
+  }, [tiles]);
 
   useEffect(() => {
     zoomRef.current = zoomLevel;
@@ -286,7 +332,7 @@ export function LightTable({ items }: LightTableProps) {
                 setSelectedItemIdx(idx);
               }
             }}
-            className={`gallery-print group cursor-pointer border border-[#E4E4E4]/80 bg-white p-[6px] w-[240px] ${hoveredItem === tile.image ? "gallery-print-lifted" : ""}`}
+            className={`gallery-print group cursor-pointer border border-[#E4E4E4]/80 bg-white p-[6px] w-[clamp(150px,50vw,240px)] ${hoveredItem === tile.image ? "gallery-print-lifted" : ""}`}
           >
             {/* Photographic Print Inside Mat */}
             <div className="relative aspect-[4/3] bg-[#F0F0EE] overflow-hidden rounded-[1px]">
@@ -327,7 +373,7 @@ export function LightTable({ items }: LightTableProps) {
         </p>
 
         {/* Drag Cue Badge */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 text-[#14130E] font-mono text-[11px] uppercase tracking-wider mb-6">
+        <div className="hidden sm:inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 text-[#14130E] font-mono text-[11px] uppercase tracking-wider mb-6">
           <span className="w-1.5 h-1.5 rounded-full bg-[#14130E] animate-pulse" />
           <span>Drag to explore</span>
         </div>
@@ -348,6 +394,10 @@ export function LightTable({ items }: LightTableProps) {
                   setSelectedItemIdx(null);
                   setHoveredItem(null);
                   setActiveCategory(cat.name);
+                  const firstVisible = cat.name === "All"
+                    ? tiles[0]
+                    : tiles.find((tile) => tile.category === cat.name);
+                  if (firstVisible) centerTile(firstVisible);
                 }}
                 className={`px-3.5 py-2 rounded-full font-mono text-[12px] uppercase tracking-[0.06em] border transition-all duration-300 ${
                   isActive
@@ -368,7 +418,7 @@ export function LightTable({ items }: LightTableProps) {
       </div>
 
       {/* Floating Zoom Controls in Bottom Right */}
-      <div className="fixed bottom-8 right-6 md:right-14 z-40 flex items-center gap-2 bg-white/80 backdrop-blur-md border border-[#E4E4E4] rounded-full p-1.5 shadow-sm">
+      <div className="fixed top-16 md:top-auto md:bottom-8 right-5 md:right-14 z-40 flex items-center gap-2 bg-white/80 backdrop-blur-md border border-[#E4E4E4] rounded-full p-1.5 shadow-sm">
         <button
           type="button"
           onClick={() => setZoomAt(zoomRef.current - 0.15)}

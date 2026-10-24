@@ -121,8 +121,11 @@
 @media (prefers-reduced-motion: reduce){.pm-project-viewer,.pm-viewer-content,.pm-viewer-image,.gallery-print{animation:none;transition:none}}
 @media (max-width:640px){.pm-viewer-caption{align-items:flex-start;flex-direction:column;padding:14px 16px 16px}.pm-viewer-image{max-height:58vh}.pm-viewer-description{font-size:12px}.pm-viewer-close{top:12px;right:12px}.pm-viewer-arrow{width:38px;height:38px;font-size:32px}}
 @media (max-width:1023px){.work-layout{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:28px}.work-index-grid{grid-template-columns:44px 22px minmax(100px,1fr) 62px 40px;column-gap:8px}.work-index-head span:nth-child(5),.work-index-place{display:none}.work-thumbnail{width:44px;height:38px}}
+@media (max-width:900px){.work-layout{grid-template-columns:1fr;gap:36px}.work-feature{position:static}.work-feature-image-wrap{aspect-ratio:1.45}.work-index{padding-top:0}}
 @media (max-width:767px){.work-layout{grid-template-columns:1fr;gap:34px}.work-feature{position:static}.work-intro{margin-bottom:22px}.work-feature-image-wrap{aspect-ratio:1.28}.work-feature-caption{margin-top:14px}.work-index{padding-top:0}.work-index-grid{grid-template-columns:44px 22px minmax(0,1fr) 62px 40px;column-gap:8px}.work-index-head{min-height:32px}.work-index-row{min-height:48px}.work-index-head span:nth-child(5),.work-index-place{display:none}}
 @media (prefers-reduced-motion: reduce){.work-row,.work-feature-image{animation:none;transition:none}}
+@media (max-width:420px){.pm-viewer-arrow{width:38px;height:38px}.pm-viewer-prev{left:8px}.pm-viewer-next{right:8px}.pm-viewer-caption{gap:12px}.project-plate-control{width:36px;height:36px}}
+@media (prefers-reduced-motion: reduce){.pm-wire path{stroke-dashoffset:0!important}}
 .hl-ui{position:absolute;z-index:60;bottom:var(--pm-cbot,30px);display:flex;flex-direction:column;gap:12px;pointer-events:none}
 .hl-ui>*{pointer-events:auto}
 .hl-glass{background:var(--hl-glass);-webkit-backdrop-filter:blur(22px) saturate(1.7);backdrop-filter:blur(22px) saturate(1.7);border:1px solid var(--hl-rim);box-shadow:inset 0 1px 0 var(--hl-hi),0 24px 60px -28px rgba(0,0,0,.5),0 1px 3px rgba(0,0,0,.06)}

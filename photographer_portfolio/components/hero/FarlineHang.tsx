@@ -240,9 +240,9 @@ export function FarlineHang({ projects }: FarlineHangProps) {
       const aspectDiff = Y(1.5 - width / height);
       const scaleW = 1 + 1.3 * aspectDiff;
       const isMobile = aspectDiff > 0.5;
-      const cardScale = isMobile ? He.size * 0.8 : He.size * scaleW;
-      const stepX = He.stepX * scaleW * (1 - 0.67 * aspectDiff);
-      const stepY = He.stepY * (1 - 0.24 * aspectDiff);
+      const cardScale = isMobile ? He.size * 0.92 : He.size * scaleW;
+      const stepX = isMobile ? 0.17 : He.stepX * scaleW * (1 - 0.67 * aspectDiff);
+      const stepY = isMobile ? -0.07 : He.stepY * (1 - 0.24 * aspectDiff);
 
       for (let e = 0; e < L; e++) {
         const target = +(s.hoverTarget === e);
@@ -291,7 +291,7 @@ export function FarlineHang({ projects }: FarlineHangProps) {
         const hoverLift = s.hover[e];
 
         const posX = (0.208 + stepX * relIdx) * width;
-        const posY = (1.08 + stepY * relIdx) * height;
+        const posY = ((isMobile ? 0.8 : 1.08) + stepY * relIdx) * height;
         const posZ = (-15 - He.stepZ * relIdx + 26 * hoverLift) * scaleW + He.dolly;
 
         const rotY = He.yaw;

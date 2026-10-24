@@ -29,11 +29,11 @@ export function Navbar() {
       {/* Floating Bottom Navigation Pill */}
       <nav
         aria-label="Main"
-        className="fixed bottom-7 left-1/2 -translate-x-1/2 z-50 flex items-center gap-[2px] p-[5px] rounded-full bg-white/70 backdrop-blur-md border border-[#E4E4E4] shadow-[0_18px_40px_-18px_rgba(20,19,14,0.12)] transition-all duration-300 max-w-[95vw] overflow-x-auto no-scrollbar"
+        className="fixed bottom-3 md:bottom-7 left-1/2 -translate-x-1/2 z-50 flex items-center gap-px p-1 md:gap-[2px] md:p-[5px] rounded-full bg-white/70 backdrop-blur-md border border-[#E4E4E4] shadow-[0_18px_40px_-18px_rgba(20,19,14,0.12)] transition-all duration-300 max-w-[95vw] overflow-x-auto no-scrollbar"
       >
         <Link
           href="/"
-          className={`flex items-center justify-center px-4 md:px-[18px] py-[11px] rounded-full text-[12px] leading-none font-mono font-medium tracking-[0.06em] uppercase whitespace-nowrap transition-colors duration-300 ${
+          className={`flex items-center justify-center px-2.5 sm:px-4 md:px-[18px] py-[10px] md:py-[11px] rounded-full text-[10px] sm:text-[12px] leading-none font-mono font-medium tracking-[0.04em] md:tracking-[0.06em] uppercase whitespace-nowrap transition-colors duration-300 ${
             isHome
               ? "bg-[#14130E] text-white"
               : "bg-transparent text-[#14130E] hover:bg-black/[0.04]"
@@ -44,7 +44,7 @@ export function Navbar() {
 
         <Link
           href="/work"
-          className={`flex items-center justify-center px-4 md:px-[18px] py-[11px] rounded-full text-[12px] leading-none font-mono font-medium tracking-[0.06em] uppercase whitespace-nowrap transition-colors duration-300 ${
+          className={`flex items-center justify-center px-2.5 sm:px-4 md:px-[18px] py-[10px] md:py-[11px] rounded-full text-[10px] sm:text-[12px] leading-none font-mono font-medium tracking-[0.04em] md:tracking-[0.06em] uppercase whitespace-nowrap transition-colors duration-300 ${
             isWork
               ? "bg-[#14130E] text-white"
               : "bg-transparent text-[#14130E] hover:bg-black/[0.04]"
@@ -55,7 +55,7 @@ export function Navbar() {
 
         <Link
           href="/gallery"
-          className={`flex items-center justify-center px-4 md:px-[18px] py-[11px] rounded-full text-[12px] leading-none font-mono font-medium tracking-[0.06em] uppercase whitespace-nowrap transition-colors duration-300 ${
+          className={`flex items-center justify-center px-2.5 sm:px-4 md:px-[18px] py-[10px] md:py-[11px] rounded-full text-[10px] sm:text-[12px] leading-none font-mono font-medium tracking-[0.04em] md:tracking-[0.06em] uppercase whitespace-nowrap transition-colors duration-300 ${
             isGallery
               ? "bg-[#14130E] text-white"
               : "bg-transparent text-[#14130E] hover:bg-black/[0.04]"
@@ -66,7 +66,7 @@ export function Navbar() {
 
         <Link
           href="/about"
-          className={`flex items-center justify-center px-4 md:px-[18px] py-[11px] rounded-full text-[12px] leading-none font-mono font-medium tracking-[0.06em] uppercase whitespace-nowrap transition-colors duration-300 ${
+          className={`flex items-center justify-center px-2.5 sm:px-4 md:px-[18px] py-[10px] md:py-[11px] rounded-full text-[10px] sm:text-[12px] leading-none font-mono font-medium tracking-[0.04em] md:tracking-[0.06em] uppercase whitespace-nowrap transition-colors duration-300 ${
             isAbout
               ? "bg-[#14130E] text-white"
               : "bg-transparent text-[#14130E] hover:bg-black/[0.04]"
@@ -77,7 +77,7 @@ export function Navbar() {
 
         <Link
           href="/contact"
-          className={`flex items-center justify-center px-4 md:px-[18px] py-[11px] rounded-full text-[12px] leading-none font-mono font-medium tracking-[0.06em] uppercase whitespace-nowrap transition-colors duration-300 ${
+          className={`flex items-center justify-center px-2.5 sm:px-4 md:px-[18px] py-[10px] md:py-[11px] rounded-full text-[10px] sm:text-[12px] leading-none font-mono font-medium tracking-[0.04em] md:tracking-[0.06em] uppercase whitespace-nowrap transition-colors duration-300 ${
             isContact
               ? "bg-[#14130E] text-white"
               : "bg-transparent text-[#14130E] hover:bg-black/[0.04]"

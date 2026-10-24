@@ -76,9 +76,9 @@ export function ContactView() {
             <div>
               <a
                 href="mailto:hello@marahalden.com"
-                className="group inline-flex items-center gap-2 font-sans text-[26px] sm:text-[34px] font-medium tracking-tight text-[#14130E] hover:opacity-75 transition-opacity"
+                className="group inline-flex max-w-full items-center gap-2 font-sans text-[20px] min-[400px]:text-[26px] sm:text-[34px] font-medium tracking-tight text-[#14130E] hover:opacity-75 transition-opacity"
               >
-                <span>hello@marahalden.com</span>
+                <span className="break-all">hello@marahalden.com</span>
                 <ArrowUpRight
                   size={26}
                   className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
